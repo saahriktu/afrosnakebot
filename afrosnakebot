@@ -1,0 +1,21 @@
+#!/bin/bash
+#
+# Afrosnakebot v0.2
+# bash script for removing images in base64 after dumping fb2 files to plain text
+# 2013 - 2014 (c) Kurashov A.K., under GNU GPLv3
+
+if [ "$#" -lt 1 ]; then
+        echo "usage: afrosnakebot file"
+        exit
+fi
+
+BASE64IMAGEFIRSTLINE=$(sed -n "/\/9j\//=" $1 | head -n 1)
+if [ "$BASE64IMAGEFIRSTLINE" != "" ]; then
+	echo "$BASE64IMAGEFIRSTLINE,\$d" | sed -f - -i $1
+	exit
+fi
+
+BASE64IMAGEFIRSTLINE=$(sed -n "/iVBORw0KGgoAAAANSUhEUgAA/=" $1 | head -n 1)
+if [ "$BASE64IMAGEFIRSTLINE" != "" ]; then
+	echo "$BASE64IMAGEFIRSTLINE,\$d" | sed -f - -i $1
+fi
